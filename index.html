@@ -554,56 +554,148 @@
                 data[key] = value;
             }
             
-            // Create email content
-            let emailSubject = encodeURIComponent('Questionario Catastrofi Naturali - ' + (data.companyName || 'Nuovo Cliente'));
-            let emailBody = encodeURIComponent(createEmailBody(data));
-            
-            // Create mailto link
-            const mailtoLink = `mailto:acireale2@ageallianz.it?subject=${emailSubject}&body=${emailBody}`;
-            
-            // Try to open email client
-            window.location.href = mailtoLink;
-            
-            // Show success message
-            showSuccessMessage();
+            // Show formatted data for easy copying
+            showFormattedData(data);
         });
 
-        function createEmailBody(data) {
-            let body = `QUESTIONARIO CATASTROFI NATURALI IMPRESA\n\n`;
-            body += `DATI DEL FABBRICATO:\n`;
-            body += `Ragione Sociale: ${data.companyName || 'Non specificato'}\n`;
-            body += `CF/P.IVA: ${data.taxCode || 'Non specificato'}\n`;
-            body += `Indirizzo: ${data.address || 'Non specificato'}\n\n`;
+        function showFormattedData(data) {
+            // Create a formatted display of all data
+            let formattedText = `QUESTIONARIO CATASTROFI NATURALI IMPRESA\n\n`;
+            formattedText += `DATI DEL FABBRICATO:\n`;
+            formattedText += `Ragione Sociale: ${data.companyName || 'Non specificato'}\n`;
+            formattedText += `CF/P.IVA: ${data.taxCode || 'Non specificato'}\n`;
+            formattedText += `Indirizzo: ${data.address || 'Non specificato'}\n\n`;
             
-            body += `DETTAGLI TECNICI:\n`;
-            body += `Classe Costruttiva: ${data.constructionClass || 'Non specificato'}\n`;
-            body += `Anno di Costruzione: ${data.constructionYear || 'Non specificato'}\n`;
-            body += `Adeguamenti Sismici: ${data.seismicImprovements || 'Non specificato'}\n`;
-            body += `Piani Fuori Terra: ${data.floorsAboveGround || 'Non specificato'}\n`;
-            body += `Misure Preventive Alluvioni: ${data.preventiveMeasures || 'Non specificato'}\n`;
-            body += `Aperture Protette: ${data.externalOpenings || 'Non specificato'}\n`;
-            body += `Piani Seminterrati: ${data.basementFloors || 'Non specificato'}\n`;
-            body += `Piano Più Basso: ${data.lowestFloor || 'Non specificato'}\n\n`;
+            formattedText += `DETTAGLI TECNICI:\n`;
+            formattedText += `Classe Costruttiva: ${getOptionText('constructionClass', data.constructionClass)}\n`;
+            formattedText += `Anno di Costruzione: ${getOptionText('constructionYear', data.constructionYear)}\n`;
+            formattedText += `Adeguamenti Sismici: ${data.seismicImprovements || 'Non specificato'}\n`;
+            formattedText += `Piani Fuori Terra: ${data.floorsAboveGround || 'Non specificato'}\n`;
+            formattedText += `Misure Preventive Alluvioni: ${getOptionText('preventiveMeasures', data.preventiveMeasures)}\n`;
+            formattedText += `Aperture Protette: ${getOptionText('externalOpenings', data.externalOpenings)}\n`;
+            formattedText += `Piani Seminterrati: ${data.basementFloors || 'Non specificato'}\n`;
+            formattedText += `Piano Più Basso: ${data.lowestFloor || 'Non specificato'}\n\n`;
             
             if (data.notes) {
-                body += `NOTE AGGIUNTIVE:\n${data.notes}\n\n`;
+                formattedText += `NOTE AGGIUNTIVE:\n${data.notes}\n\n`;
             }
             
-            body += `Questionario compilato il ${new Date().toLocaleDateString('it-IT')}\n`;
-            return body;
+            formattedText += `Questionario compilato il ${new Date().toLocaleDateString('it-IT')}\n`;
+            formattedText += `\nINVIA QUESTA EMAIL A: acireale2@ageallianz.it`;
+            
+            // Create the display modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                max-width: 90%;
+                max-height: 80%;
+                overflow-y: auto;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            `;
+            
+            modalContent.innerHTML = `
+                <h2 style="color: #003d82; margin-bottom: 20px;">✅ Questionario Completato!</h2>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">📋 Riepilogo dati da inviare:</h3>
+                    <pre style="white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #333; background: white; padding: 15px; border-radius: 5px; border: 1px solid #ddd;">${formattedText}</pre>
+                </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <button id="copyButton" style="background: #003d82; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-right: 10px;">📋 Copia tutto</button>
+                    <button id="emailButton" style="background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-right: 10px;">📧 Apri Email</button>
+                    <button id="closeButton" style="background: #6c757d; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">❌ Chiudi</button>
+                </div>
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; font-size: 14px; color: #1565c0;">
+                    <strong>📝 Istruzioni:</strong><br>
+                    1. Clicca "Copia tutto" per copiare i dati<br>
+                    2. Apri la tua app email (Gmail, Outlook, ecc.)<br>
+                    3. Crea una nuova email per: <strong>acireale2@ageallianz.it</strong><br>
+                    4. Incolla i dati copiati nell'email<br>
+                    5. Aggiungi come oggetto: "Questionario Catastrofi Naturali"<br>
+                    6. Invia l'email
+                </div>
+            `;
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Copy functionality
+            document.getElementById('copyButton').addEventListener('click', function() {
+                navigator.clipboard.writeText(formattedText).then(() => {
+                    this.innerHTML = '✅ Copiato!';
+                    this.style.background = '#28a745';
+                    setTimeout(() => {
+                        this.innerHTML = '📋 Copia tutto';
+                        this.style.background = '#003d82';
+                    }, 2000);
+                });
+            });
+            
+            // Email functionality (backup)
+            document.getElementById('emailButton').addEventListener('click', function() {
+                const emailSubject = encodeURIComponent('Questionario Catastrofi Naturali - ' + (data.companyName || 'Nuovo Cliente'));
+                const emailBody = encodeURIComponent(formattedText);
+                const mailtoLink = `mailto:acireale2@ageallianz.it?subject=${emailSubject}&body=${emailBody}`;
+                window.location.href = mailtoLink;
+            });
+            
+            // Close functionality
+            document.getElementById('closeButton').addEventListener('click', function() {
+                document.body.removeChild(modal);
+            });
+            
+            // Close on background click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
         }
-
-        function showSuccessMessage() {
-            const successDiv = document.createElement('div');
-            successDiv.className = 'success-message';
-            successDiv.innerHTML = '✅ Il questionario è stato preparato per l\'invio! Se il client email non si è aperto automaticamente, copia i dati e inviali manualmente a acireale2@ageallianz.it';
+        
+        function getOptionText(fieldName, value) {
+            const options = {
+                constructionClass: {
+                    'A': 'A. Laterizi / conglomerati non armati',
+                    'B': 'B. C.A. prefabbricato',
+                    'C': 'C. C.A. gettato in opera',
+                    'D': 'D. Acciaio o legno lamellare',
+                    'E': 'E. Non risponde'
+                },
+                constructionYear: {
+                    'A': 'A. Prima del 1976',
+                    'B': 'B. 1976-1988',
+                    'C': 'C. 1989-2009',
+                    'D': 'D. 2010-oggi',
+                    'E': 'E. Non risponde'
+                },
+                preventiveMeasures: {
+                    'A': 'A. Sì',
+                    'B': 'B. No',
+                    'C': 'C. Non risponde'
+                },
+                externalOpenings: {
+                    'A': 'A. Sì',
+                    'B': 'B. No',
+                    'C': 'C. Non risponde'
+                }
+            };
             
-            const form = document.getElementById('naturalDisasterForm');
-            form.parentNode.insertBefore(successDiv, form);
-            
-            setTimeout(() => {
-                successDiv.remove();
-            }, 10000);
+            return options[fieldName]?.[value] || value || 'Non specificato';
         }
 
         function resetForm() {
@@ -625,4 +717,4 @@
         updateProgress();
     </script>
 </body>
-</html>        
+</html>
