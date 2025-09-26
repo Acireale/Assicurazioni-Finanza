@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionario Catastrofi Naturali Impresa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #003d82;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .company-info {
+            flex: 1;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .allianz-logo {
+            background: white;
+            color: #003d82;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #003d82;
+            border-bottom: 2px solid #003d82;
+            padding-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input[type="text"], .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input[type="text"]:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #003d82;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .radio-option:hover {
+            background: #f0f8ff;
+            border-color: #003d82;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .radio-option.selected {
+            background: #e6f3ff;
+            border-color: #003d82;
+            font-weight: bold;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #003d82;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #002a5c;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #003d82, #0056b3);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .validation-error {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .form-content {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="company-info">
+                <div class="company-name">ASSICURAZIONI & FINANZA DI ALBERTO SCANDURA E C. S.A.S.</div>
+            </div>
+            <div class="allianz-logo">Allianz</div>
+        </div>
+
+        <div class="form-content">
+            <h1 class="form-title">Questionario Catastrofi Naturali Impresa</h1>
+            <p class="form-subtitle">Compila toccando le caselle. Testo riassunto per una lettura più rapida.</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <form id="naturalDisasterForm">
+                <!-- Dati del Fabbricato -->
+                <div class="section">
+                    <h2 class="section-title">Dati del Fabbricato</h2>
+                    <div class="form-group">
+                        <label for="companyName">Ragione Sociale:</label>
+                        <input type="text" id="companyName" name="companyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taxCode">CF/P.IVA:</label>
+                        <input type="text" id="taxCode" name="taxCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Indirizzo da assicurare:</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                </div>
+
+                <!-- Classe Costruttiva -->
+                <div class="section">
+                    <h2 class="section-title">Classe Costruttiva</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="constructionClass" value="A">
+                                A. Laterizi / conglomerati non armati
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionClass" value="B">
+                                B. C.A. prefabbricato
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionClass" value="C">
+                                C. C.A. gettato in opera
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionClass" value="D">
+                                D. Acciaio o legno lamellare
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionClass" value="E">
+                                E. Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anno di Costruzione -->
+                <div class="section">
+                    <h2 class="section-title">Anno di Costruzione</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="constructionYear" value="A">
+                                A. Prima del 1976
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionYear" value="B">
+                                B. 1976-1988
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionYear" value="C">
+                                C. 1989-2009
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionYear" value="D">
+                                D. 2010-oggi
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="constructionYear" value="E">
+                                E. Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adeguamenti Sismici -->
+                <div class="section">
+                    <h2 class="section-title">Adeguamenti / Miglioramenti Sismici (dal 2009)</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="seismicImprovements" value="Si">
+                                Sì
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="seismicImprovements" value="No">
+                                No
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="seismicImprovements" value="NonRisponde">
+                                Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Numero Piani Fuori Terra -->
+                <div class="section">
+                    <h2 class="section-title">Numero Piani Fuori Terra</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="Nessuno">
+                                Nessuno
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="1">
+                                1
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="2">
+                                2
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="3-4">
+                                3/4
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="5-7">
+                                5-7
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="Oltre7">
+                                Oltre 7
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="floorsAboveGround" value="NonRisponde">
+                                Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Misure Preventive -->
+                <div class="section">
+                    <h2 class="section-title">Presenza di misure preventive contro il rischio di alluvione, esondazione e inondazione</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="preventiveMeasures" value="A">
+                                A. Sì
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="preventiveMeasures" value="B">
+                                B. No
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="preventiveMeasures" value="C">
+                                C. Non risponde
+                            </label>
+                        </div>
+                        <div class="info-text">
+                            Esempi: paratie, vasche rialzate, barriere difensive, pompe antiallagamento, valvole di non ritorno.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aperture verso l'esterno -->
+                <div class="section">
+                    <h2 class="section-title">Aperture verso l'esterno (piano terra, seminterrato, interrato)</h2>
+                    <p style="margin-bottom: 15px; font-size: 14px;">Nel fabbricato tutte le aperture verso l'esterno poste al piano terra, seminterrato e interrato sono protette da serramenti ed infissi antiallagamento certificati secondo la normativa UNI 12208:2020 con almeno classe 7A.</p>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="externalOpenings" value="A">
+                                A. Sì
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="externalOpenings" value="B">
+                                B. No
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="externalOpenings" value="C">
+                                C. Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Numero piani seminterrati/interrati -->
+                <div class="section">
+                    <h2 class="section-title">Se si assicura l'intero fabbricato: Numero piani seminterrati/interrati</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="basementFloors" value="Nessuno">
+                                Nessuno
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="basementFloors" value="1">
+                                1
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="basementFloors" value="2">
+                                2
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="basementFloors" value="Oltre2">
+                                Oltre 2
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="basementFloors" value="NonRisponde">
+                                Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Piano più basso assicurato -->
+                <div class="section">
+                    <h2 class="section-title">Se si assicura solo una porzione del fabbricato: Piano più basso assicurato</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="lowestFloor" value="Seminterrato">
+                                Seminterrato/Interrato
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="lowestFloor" value="PianoTerra">
+                                Piano Terra
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="lowestFloor" value="1Piano">
+                                1° piano
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="lowestFloor" value="2Piano">
+                                2° piano
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="lowestFloor" value="Oltre2Piano">
+                                Oltre il 2° piano
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="lowestFloor" value="NonRisponde">
+                                Non risponde
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Note -->
+                <div class="section">
+                    <h2 class="section-title">Note/Dettagli aggiuntivi</h2>
+                    <div class="form-group">
+                        <textarea name="notes" rows="4" placeholder="Inserisci eventuali note o dettagli aggiuntivi..."></textarea>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reimposta</button>
+                    <button type="submit" class="btn btn-primary">Clicca qui per inviare il questionario in agenzia acireale2@ageallianz.it</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Progress bar update
+        function updateProgress() {
+            const form = document.getElementById('naturalDisasterForm');
+            const totalFields = form.querySelectorAll('input[required], input[type="radio"]:checked').length;
+            const filledFields = form.querySelectorAll('input[required]:valid, input[type="radio"]:checked').length;
+            const progress = Math.round((filledFields / Math.max(totalFields, 1)) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Radio button visual feedback
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remove selected class from all options in the same group
+                document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+                    r.closest('.radio-option').classList.remove('selected');
+                });
+                // Add selected class to current option
+                this.closest('.radio-option').classList.add('selected');
+                updateProgress();
+            });
+        });
+
+        // Form validation and submission
+        document.getElementById('naturalDisasterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            
+            // Collect form data
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Create email content
+            let emailSubject = encodeURIComponent('Questionario Catastrofi Naturali - ' + (data.companyName || 'Nuovo Cliente'));
+            let emailBody = encodeURIComponent(createEmailBody(data));
+            
+            // Create mailto link
+            const mailtoLink = `mailto:acireale2@ageallianz.it?subject=${emailSubject}&body=${emailBody}`;
+            
+            // Try to open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            showSuccessMessage();
+        });
+
+        function createEmailBody(data) {
+            let body = `QUESTIONARIO CATASTROFI NATURALI IMPRESA\n\n`;
+            body += `DATI DEL FABBRICATO:\n`;
+            body += `Ragione Sociale: ${data.companyName || 'Non specificato'}\n`;
+            body += `CF/P.IVA: ${data.taxCode || 'Non specificato'}\n`;
+            body += `Indirizzo: ${data.address || 'Non specificato'}\n\n`;
+            
+            body += `DETTAGLI TECNICI:\n`;
+            body += `Classe Costruttiva: ${data.constructionClass || 'Non specificato'}\n`;
+            body += `Anno di Costruzione: ${data.constructionYear || 'Non specificato'}\n`;
+            body += `Adeguamenti Sismici: ${data.seismicImprovements || 'Non specificato'}\n`;
+            body += `Piani Fuori Terra: ${data.floorsAboveGround || 'Non specificato'}\n`;
+            body += `Misure Preventive Alluvioni: ${data.preventiveMeasures || 'Non specificato'}\n`;
+            body += `Aperture Protette: ${data.externalOpenings || 'Non specificato'}\n`;
+            body += `Piani Seminterrati: ${data.basementFloors || 'Non specificato'}\n`;
+            body += `Piano Più Basso: ${data.lowestFloor || 'Non specificato'}\n\n`;
+            
+            if (data.notes) {
+                body += `NOTE AGGIUNTIVE:\n${data.notes}\n\n`;
+            }
+            
+            body += `Questionario compilato il ${new Date().toLocaleDateString('it-IT')}\n`;
+            return body;
+        }
+
+        function showSuccessMessage() {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = '✅ Il questionario è stato preparato per l\'invio! Se il client email non si è aperto automaticamente, copia i dati e inviali manualmente a acireale2@ageallianz.it';
+            
+            const form = document.getElementById('naturalDisasterForm');
+            form.parentNode.insertBefore(successDiv, form);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 10000);
+        }
+
+        function resetForm() {
+            if (confirm('Sei sicuro di voler reimpostare tutti i dati inseriti?')) {
+                document.getElementById('naturalDisasterForm').reset();
+                document.querySelectorAll('.radio-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                updateProgress();
+            }
+        }
+
+        // Input event listeners for real-time validation
+        document.querySelectorAll('input[required]').forEach(input => {
+            input.addEventListener('input', updateProgress);
+        });
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>
